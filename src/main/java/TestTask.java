@@ -8,8 +8,9 @@ public class TestTask {
     public List<WebElement> getSomeElements(String path) {
         if (path == null){
             throw new IllegalArgumentException("getElements: illegal path (NULL)"); // 1!!! после throw должно быть new
-            path = "//*[@id='Hello']"; // находит элемент на страницес в id = "Hello" располагающийся в любом месте
-            //дойдет ли дело до переменной path, или после throw уже ничего выполняться не будет?
+            //path = "//*[@id='Hello']"; // находит элемент на страницес в id = "Hello" располагающийся в любом месте
+            //Но, смысла в этой присваивании нет, так как код программы не дойдет до переменной path,
+            // после throw new exception уже ничего выполняться не будет!
         }
         WebDriverHelper wd = new WebDriverHelper(); // WebDriverHelper - самописный класс,
                                                     // помогающий сконструировать класс WebDriver
@@ -18,6 +19,7 @@ public class TestTask {
         // и из типа используемого в цикле  for(WebElement element : result) ниже
         result.add(wd.getElements(path)); // список result положили элемент, находящийся по пути path
         // при помощи метода getElement(path) принимающего string, и возвращающего WebElement
+
         if (!result.isEmpty()){
             // не соответствие условия содержанию. если список пустой, нет смысла перебирать его элементы
             // предположительно условие должно выглядеть так: if (!result.isEmpty()) или if (result.size() > 0)
@@ -25,7 +27,9 @@ public class TestTask {
                 if(element.getText().equals("remove")) {
                     // идет сравнение содержимого WebElement.getText() со строкой "remove"
                     // предположительно сравнение корректней делать через equals тогда условие должно выглядеть так
-                    result.remove(element); //TODO проверить корректность работы данного синтаксиса
+                    result.remove(element); //внутри цикла foreach нельзя производить добавление или удаление
+                    // элементов коллекции. как выход, создать еще один список, и добавлять в него только те элементы,
+                    // которые удовлетворяют требованиям
                 }
             }
         } else {
