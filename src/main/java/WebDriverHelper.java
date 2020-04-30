@@ -14,6 +14,10 @@ public class WebDriverHelper {
         return WEB_DRIVER.findElement(By.id(path));  // не корректно, работает как заглушка
     }
 
+    public boolean isElementsPresent(String path) {
+        return true; // не корректно, работает как заглушка
+    }
+
 
 
 }

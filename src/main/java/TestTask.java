@@ -1,3 +1,4 @@
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
@@ -12,8 +13,11 @@ public class TestTask {
             //Но, смысла в этой присваивании нет, так как код программы не дойдет до переменной path,
             // после throw new exception уже ничего выполняться не будет!
         }
+
         WebDriverHelper wd = new WebDriverHelper(); // WebDriverHelper - самописный класс,
                                                     // помогающий сконструировать класс WebDriver
+
+
         List<WebElement> result = new ArrayList<WebElement>();// задать тип ArrayList.
         // List<WebElement> result = new ArrayList<WebElement>(); судя из возвращаемого методом getSomeElements типа
         // и из типа используемого в цикле  for(WebElement element : result) ниже
@@ -29,9 +33,26 @@ public class TestTask {
                     // предположительно сравнение корректней делать через equals тогда условие должно выглядеть так
                     result.remove(element); //внутри цикла foreach нельзя производить добавление или удаление
                     // элементов коллекции. как выход, создать еще один список, и добавлять в него только те элементы,
-                    // которые удовлетворяют требованиям
+                    // которые удовлетворяют требованиям см часть кода ниже
+                    // Второй вариант - использовать цикл fori
                 }
             }
+            // рекомендуемая реализация удаления из коллекции.
+            List<WebElement> tempResult = new ArrayList<WebElement>();
+            for(WebElement element : result){
+                if(!element.getText().equals("remove")) {
+                    tempResult.add(element);
+                }
+            }
+            result = tempResult;
+            // второй вариант через fori
+            for (int i = 0; i < result.size(); i++) {
+                if (result.get(i).equals("remove")) {
+                    result.remove(i);
+                    i--;
+                }
+            }
+
         } else {
             return null;
             //разобраться в условии что приходит в else и если в него приходит пустой result,
@@ -41,6 +62,7 @@ public class TestTask {
 
         if (!wd.isElementsPresent(path)) { //возможно  isElementsPresent возвращает boolean, разобраться в его ответах.
             // предположительно if (!wd.isElementsPresent(path))
+
             System.out.println("There aren't any elements by this path");
             return null; //  мы возвращаем List<WebElement>
             // предположительно return null;
